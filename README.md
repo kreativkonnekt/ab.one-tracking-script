@@ -1,3 +1,5 @@
+# For now its public, but we need to find a good solution to make it private and still accessible in the abone app
+
 # ab.one Tracking Script
 
 #### Building the script
