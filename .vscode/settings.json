@@ -1,0 +1,14 @@
+{
+	"editor.formatOnSave": true,
+	"editor.tabSize": 3,
+	"editor.insertSpaces": true,
+	"files.trimTrailingWhitespace": true,
+	"files.insertFinalNewline": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"git.branchProtection": ["staging", "prod"],
+	"typescript.validate.enable": true,
+	"typescript.tsserver.experimental.enableProjectDiagnostics": true
+}

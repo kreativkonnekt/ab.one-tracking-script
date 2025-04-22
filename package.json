@@ -1,0 +1,19 @@
+{
+	"name": "ab.one-tracking-script",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/main.ts",
+	"scripts": {
+		"build": "rimraf dist && tsc && mv dist/main.js dist/output.js && javascript-obfuscator dist/output.js   --output dist/output.min.js   --compact true   --control-flow-flattening true   --dead-code-injection false   --debug-protection false   --self-defending false   --string-array false   --rename-globals true   --identifier-names-generator mangled "
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"devDependencies": {
+		"javascript-obfuscator": "^4.1.1",
+		"rimraf": "^6.0.1",
+		"terser": "^5.39.0",
+		"typescript": "^5.8.3"
+	}
+}
