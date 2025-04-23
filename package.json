@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "src/main.ts",
 	"scripts": {
-		"build": "rimraf dist && tsc && mv dist/main.js dist/output.js && javascript-obfuscator dist/output.js   --output dist/output.min.js   --compact true   --control-flow-flattening true   --dead-code-injection false   --debug-protection false   --self-defending false   --string-array false   --rename-globals true   --identifier-names-generator mangled "
+		"build": "tsc && mv dist/main.js dist/output.js && javascript-obfuscator dist/output.js   --output dist/output.min.js   --compact true   --control-flow-flattening true   --dead-code-injection false   --debug-protection false   --self-defending false   --string-array false   --rename-globals true   --identifier-names-generator mangled "
 	},
 	"keywords": [],
 	"author": "",
