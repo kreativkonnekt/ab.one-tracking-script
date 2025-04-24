@@ -1,5 +1,7 @@
+const myVar: string = "Hello World 123";
+
 function abone(greeting: string) {
 	console.log(`Hello ${greeting}!`);
 
-	console.log("kreativkonnekt auf die 1");
+	console.log({ myVar });
 }
