@@ -1,5 +1,6 @@
 const abone = (tests) => {
-    log("Hello World");
+    console.log(Shopify);
+    log(JSON.stringify(Shopify));
 };
 const log = (message) => {
     const prefix = "[AB.ONE] ";

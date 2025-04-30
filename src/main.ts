@@ -1,7 +1,7 @@
 const abone = (tests: any) => {
-	log("Hello World");
+	console.log(Shopify);
 
-	log(window.Shopify);
+	log(JSON.stringify(Shopify));
 };
 
 const log = (message: string) => {

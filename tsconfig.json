@@ -3,10 +3,12 @@
 		"target": "ES6",
 		"module": "commonjs",
 		"outDir": "./dist",
+		"baseUrl": "./src",
 		"strict": true,
 		"esModuleInterop": true,
 		"noEmitOnError": true,
 		"alwaysStrict": false
 	},
+	"include": ["src"],
 	"files": ["src/main.ts"]
 }
