@@ -1,11 +1,7 @@
 const abone = (tests: any) => {
-	console.log(Shopify);
-
-	log(JSON.stringify(Shopify));
-};
-
-const log = (message: string) => {
-	const prefix = "[AB.ONE] ";
-
-	console.log(prefix + message);
+	if (Shopify) {
+		console.log("abone", Shopify);
+	} else {
+		console.log("abone", "Shopify is not defined");
+	}
 };
