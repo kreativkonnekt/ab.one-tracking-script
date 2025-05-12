@@ -1,4 +1,7 @@
 <script type="text/javascript">
    {{ shop.metafields.abone.script.value }}
-   abone({{ shop.metafields.abone.tests.value }});
+
+   window.addEventListener('load', function () {
+      abone({{ shop.metafields.abone.tests.value }});
+   })
 </script>
