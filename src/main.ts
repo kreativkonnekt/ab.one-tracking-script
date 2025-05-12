@@ -19,6 +19,13 @@ interface Visitor {
 	// updatedAt: string;
 }
 
+// modify console.log method to add a prefix
+const originalLog = console.log;
+
+console.log = (...args: any[]) => {
+	originalLog("ABONE:", ...args);
+};
+
 const CONFIG = {
 	/** The key for the localstorage. */
 	LS_KEY: "abone_visitor",
