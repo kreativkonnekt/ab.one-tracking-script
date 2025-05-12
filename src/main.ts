@@ -1,7 +1,11 @@
 const abone = (tests: any) => {
-	if (Shopify) {
-		console.log("abone", Shopify);
-	} else {
-		console.log("abone", "Shopify is not defined");
+	try {
+		if (Shopify) {
+			console.log("abone", Shopify);
+		} else {
+			throw new Error("Shopify is not defined");
+		}
+	} catch (err) {
+		console.log("abone", err);
 	}
 };
