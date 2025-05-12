@@ -37,7 +37,7 @@ const abone = (tests: any) => {
 		return;
 	}
 
-	console.log(getVisitor());
+	console.log("Hello World");
 };
 
 const getVisitor = () => {

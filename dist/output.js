@@ -12,7 +12,7 @@ const abone = (tests) => {
         console.error("Shopify is not defined");
         return;
     }
-    console.log(getVisitor());
+    console.log("Hello World");
 };
 const getVisitor = () => {
     const visitor = localStorage.getItem(CONFIG.LS_KEY);
