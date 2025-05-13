@@ -23,5 +23,6 @@ const abone = (tests) => {
         log("Shopify is not defined");
         return;
     }
+    console.log(123);
     log("Script loaded successfully.");
 };
