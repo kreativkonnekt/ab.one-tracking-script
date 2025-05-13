@@ -9,6 +9,11 @@
 		"noEmitOnError": true,
 		"alwaysStrict": false
 	},
-	"include": ["src"],
-	"files": ["src/main.ts"]
+	"include": [
+		"src/main.ts",
+		"src/utils.ts",
+		"src/config.ts",
+		"src/global.d.ts"
+	], // Nur relevante .ts-Dateien hier
+	"exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"] // Ausschließen von Tests oder anderen irrelevanten Dateien
 }
