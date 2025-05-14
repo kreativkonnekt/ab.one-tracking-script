@@ -75,7 +75,14 @@ const emit = (eventType: string, eventData: any = null): void => {
 // Main script
 //
 
-const abone = (tests: any) => {
+const abone = (
+	tests: any,
+	templateName: string,
+	shopId: string,
+	localization: any
+) => {
+	console.log({ tests, templateName, shopId, localization });
+
 	if (Shopify.designMode)
 		return log("Design mode detected. Abandoning script execution.");
 

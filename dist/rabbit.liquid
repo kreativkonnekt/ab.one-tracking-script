@@ -2,6 +2,6 @@
    {{ shop.metafields.abone.script.value }}
 
    window.addEventListener('load', function () {
-      abone({{ shop.metafields.abone.tests.value }});
+      abone({{ shop.metafields.abone.tests.value }}, {{ template.name }}, {{ shop.id }}, {{ localization }});
    })
 </script>
