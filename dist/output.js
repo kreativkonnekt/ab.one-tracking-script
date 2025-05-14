@@ -66,7 +66,8 @@ const emit = (eventType, eventData = null) => {
 //
 // Main script
 //
-const abone = (tests) => {
+const abone = (tests, templateName, shopId, localization) => {
+    console.log({ tests, templateName, shopId, localization });
     if (Shopify.designMode)
         return log("Design mode detected. Abandoning script execution.");
     emit("pageview", {
