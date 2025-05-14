@@ -78,7 +78,7 @@ const emit = (eventType: string, eventData: any = null): void => {
 const abone = (
 	tests: any,
 	templateName: string,
-	shopId: string,
+	shopId: number,
 	localization: any
 ) => {
 	console.log({ tests, templateName, shopId, localization });
