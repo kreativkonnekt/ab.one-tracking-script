@@ -106,20 +106,16 @@ const loadVisitor = (): Visitor => {
 // Main script
 //
 
-const abone = (
-	tests: any,
-	templateName: string,
-	shopId: number,
-	localization: any
-) => {
-	console.log({ tests, templateName, shopId, localization });
+const abone = {
+	init(tests: any, templateName: string, shopId: number, localization: any) {
+		log({ tests, templateName, shopId, localization });
 
-	if (Shopify.designMode)
-		return log("Design mode detected. Abandoning script execution.");
+		if (Shopify.designMode)
+			return log("Design mode detected. Abandoning script execution.");
 
-	const visitor = loadVisitor();
-
-	log({ visitor });
-
-	log("Script loaded successfully.");
+		const visitor = loadVisitor();
+	},
+	reset() {
+		log("Resetting tracking script.");
+	},
 };
