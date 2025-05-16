@@ -149,25 +149,15 @@ const getRelevantTests = (
 ): Test[] | [] => {
 	if (!tests.length) return [];
 
-	const liveTests = tests.map((t) => t.id);
-
-	// Check for suitable tests
-
 	const relevantTests: Test[] = tests.filter((test) => {
 		if (test.deviceType !== visitor.device.type && test.deviceType !== "all")
 			return false;
 		if (test.category !== templateName) return false;
 
 		return true;
-		// check conditions
-		// check variant view
 	});
 
 	return relevantTests;
-
-	// Get visitors tests
-	// remove tests that are not live
-	// set the live tests
 };
 
 //
@@ -189,11 +179,7 @@ const abone = {
 		const visitor = loadVisitor();
 
 		const test = getRelevantTests(tests, templateName, visitor);
-		const relevantTests = getRelevantTests(
-			visitor.tests,
-			templateName,
-			visitor
-		);
+		const relevantTests = getRelevantTests(tests, templateName, visitor);
 
 		log({ relevantTests });
 	},
