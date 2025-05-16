@@ -167,11 +167,18 @@ const applyTests = (relevantTests: Test[], visitor: Visitor) => {
 	saveVisitor({ ...visitor, tests: relevantTests.map((t) => t.id) });
 
 	relevantTests.forEach((test) => {
-		// randomly choose a tests variant (later based on weights)
-		const variant =
+		const url = new URL(window.location.href);
+		const viewParameter = url.searchParams.get("view");
+		const variantSuffix =
 			test.variants[Math.floor(Math.random() * test.variants.length)];
 
-		log("Selected variant", variant);
+		if (variantSuffix) {
+			url.searchParams.set("view", variantSuffix);
+			log("Setting view parameter", variantSuffix);
+			window.history.replaceState({}, "", url.toString());
+		}
+
+		log("Selected variant", variantSuffix ? variantSuffix : "default");
 	});
 };
 

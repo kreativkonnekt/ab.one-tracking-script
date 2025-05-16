@@ -138,9 +138,15 @@ const applyTests = (relevantTests, visitor) => {
         return log("No relevant tests found.");
     saveVisitor(Object.assign(Object.assign({}, visitor), { tests: relevantTests.map((t) => t.id) }));
     relevantTests.forEach((test) => {
-        // randomly choose a tests variant (later based on weights)
-        const variant = test.variants[Math.floor(Math.random() * test.variants.length)];
-        log("Selected variant", variant);
+        const url = new URL(window.location.href);
+        const viewParameter = url.searchParams.get("view");
+        const variantSuffix = test.variants[Math.floor(Math.random() * test.variants.length)];
+        if (variantSuffix) {
+            url.searchParams.set("view", variantSuffix);
+            log("Setting view parameter", variantSuffix);
+            window.history.replaceState({}, "", url.toString());
+        }
+        log("Selected variant", variantSuffix ? variantSuffix : "default");
     });
 };
 //
