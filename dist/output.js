@@ -25,7 +25,7 @@ const error = (...args) => {
 const getDeviceType = () => {
     const ua = navigator.userAgent;
     if (/Tablet|iPad/i.test(ua))
-        return "tablet";
+        return "mobile"; // normally this is a tablet
     if (/Mobile|Android|iPhone|iPod|IEMobile|BlackBerry/i.test(ua))
         return "mobile";
     return "desktop";
@@ -106,10 +106,38 @@ const loadVisitor = () => {
             },
             tests: [],
         };
-        localStorage.setItem(config.localStorageKey, JSON.stringify(visitor));
     }
     log(`${foundVisitor ? "Loaded" : "Created"} visitor.`, visitor);
     return visitor;
+};
+/** Save/Update the visitor */
+const saveVisitor = (visitor) => {
+    localStorage.setItem(config.localStorageKey, JSON.stringify(visitor));
+    log("Saved visitor.", visitor);
+};
+/** Checks if a user fullfils conditions of a test. */
+const validateConditions = (conditions, visitor) => {
+    conditions.every((condition) => { });
+};
+/** Process all tests. */
+const getRelevantTests = (tests, templateName, visitor) => {
+    if (!tests.length)
+        return [];
+    const liveTests = tests.map((t) => t.id);
+    // Check for suitable tests
+    const relevantTests = tests.filter((test) => {
+        if (test.deviceType !== visitor.device.type && test.deviceType !== "all")
+            return false;
+        if (test.category !== templateName)
+            return false;
+        return true;
+        // check conditions
+        // check variant view
+    });
+    return relevantTests;
+    // Get visitors tests
+    // remove tests that are not live
+    // set the live tests
 };
 //
 // Main script
@@ -120,6 +148,9 @@ const abone = {
         if (Shopify.designMode)
             return log("Design mode detected. Abandoning script execution.");
         const visitor = loadVisitor();
+        const test = getRelevantTests(tests, templateName, visitor);
+        const relevantTests = getRelevantTests(visitor.tests, templateName, visitor);
+        log({ relevantTests });
     },
     reset() {
         localStorage.removeItem(config.localStorageKey);
