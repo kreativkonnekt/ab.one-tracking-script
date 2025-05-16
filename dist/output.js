@@ -132,18 +132,29 @@ const getRelevantTests = (tests, templateName, visitor) => {
     });
     return relevantTests;
 };
+/** Apply relevant tests. */
+const applyTests = (relevantTests, visitor) => {
+    if (!relevantTests.length)
+        return log("No relevant tests found.");
+    saveVisitor(Object.assign(Object.assign({}, visitor), { tests: relevantTests.map((t) => t.id) }));
+    relevantTests.forEach((test) => {
+        // randomly choose a tests variant (later based on weights)
+        const variant = test.variants[Math.floor(Math.random() * test.variants.length)];
+        log("Selected variant", variant);
+    });
+};
 //
 // Main script
 //
 const abone = {
     init(tests, templateName, shopId, localization) {
-        log({ tests, templateName, shopId, localization });
         if (Shopify.designMode)
             return log("Design mode detected. Abandoning script execution.");
         const visitor = loadVisitor();
         const test = getRelevantTests(tests, templateName, visitor);
         const relevantTests = getRelevantTests(tests, templateName, visitor);
-        log({ relevantTests });
+        applyTests(relevantTests, visitor);
+        log({ relevantTests, tests, templateName, shopId, localization });
     },
     reset() {
         localStorage.removeItem(config.localStorageKey);

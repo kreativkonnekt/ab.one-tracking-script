@@ -41,7 +41,7 @@ interface Visitor {
 	referrer: Document["referrer"];
 	referringDomain: string;
 	localization: any;
-	tests: [];
+	tests: Test["id"][];
 }
 
 interface Test {
