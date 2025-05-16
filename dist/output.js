@@ -168,18 +168,18 @@ const applyVariant = (test, variantSuffix) => {
         return;
     if (!view && variantSuffix) {
         url.searchParams.set("view", variantSuffix);
-        window.history.replaceState({}, "", url.toString());
+        window.location.replace(url.toString());
         return;
     }
     if (view && !variantSuffix) {
         // If the view is set but the variant suffix is not, remove the view parameter
         url.searchParams.delete("view");
-        window.history.replaceState({}, "", url.toString());
+        window.location.replace(url.toString());
         return;
     }
     if (view !== variantSuffix) {
         url.searchParams.set("view", variantSuffix);
-        window.history.replaceState({}, "", url.toString());
+        window.location.replace(url.toString());
         return;
     }
 };
