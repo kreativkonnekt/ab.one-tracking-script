@@ -60,6 +60,15 @@ const getUTMParameters = (): Record<string, string> => {
 	}, {} as Record<string, string>);
 };
 
+/** Generates a UUID */
+const generateUUID = (): string => {
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+		var r = (Math.random() * 16) | 0,
+			v = c == "x" ? r : (r & 0x3) | 0x8;
+		return v.toString(16);
+	});
+};
+
 /** Emits an event to the Shopify pixel. */
 const emit = (eventType: string, eventData: any = null): void => {
 	try {
@@ -69,6 +78,28 @@ const emit = (eventType: string, eventData: any = null): void => {
 	} catch (e) {
 		error("Could not send event:", e);
 	}
+};
+
+/** Load or create the visitor. */
+const loadVisitor = (): Visitor => {
+	let foundVisitor = true;
+	let visitor: Visitor = JSON.parse(
+		localStorage.getItem(config.localStorageKey) || "{}"
+	);
+
+	if (!visitor.id) {
+		foundVisitor = false;
+
+		visitor = {
+			id: generateUUID(),
+		};
+
+		localStorage.setItem(config.localStorageKey, JSON.stringify(visitor));
+	}
+
+	log(`${foundVisitor ? "Loaded" : "Created"} visitor.`, visitor);
+
+	return visitor;
 };
 
 //
@@ -86,11 +117,9 @@ const abone = (
 	if (Shopify.designMode)
 		return log("Design mode detected. Abandoning script execution.");
 
-	emit("pageview", {
-		device: getDeviceType(),
-		utmParams: getUTMParameters(),
-		referrer: getReferringDomain(document.referrer),
-	});
+	const visitor = loadVisitor();
+
+	log({ visitor });
 
 	log("Script loaded successfully.");
 };
