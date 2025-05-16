@@ -136,7 +136,8 @@ const getRelevantTests = (tests, templateName, visitor) => {
 const applyTests = (relevantTests, visitor) => {
     if (!relevantTests.length)
         return log("No relevant tests found.");
-    relevantTests.forEach((test) => {
+    for (let i = 0; i < relevantTests.length; i++) {
+        const test = relevantTests[i];
         let variantSuffix = null;
         const assignment = visitor.assignments.find((a) => a.testId === test.id);
         if (assignment) {
@@ -158,7 +159,7 @@ const applyTests = (relevantTests, visitor) => {
             emit("variant_assigned", { variantSuffix });
         }
         applyVariant(test, variantSuffix);
-    });
+    }
 };
 /** Apply a variant. */
 const applyVariant = (test, variantSuffix) => {

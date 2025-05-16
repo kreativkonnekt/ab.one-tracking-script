@@ -1,24 +1,21 @@
 <script type="text/javascript">
    {{ shop.metafields.abone.script.value }}
 
-   window.addEventListener('load', function () {
-
-      const localization = {
-         country: {
-            iso_code: {{ localization.country.iso_code | json }},
-            name: {{ localization.country.name | json }},
-            currency_code: {{ localization.country.currency.iso_code | json }}
-         },
-         language: {
-            iso_code: {{ localization.language.iso_code | json }},
-            name: {{ localization.language.name | json }}
-         },
-         market: {
-            handle: {{ localization.market.handle | json }},
-            id: {{ localization.market.id | json }}
-         }
+   const localization = {
+      country: {
+         iso_code: {{ localization.country.iso_code | json }},
+         name: {{ localization.country.name | json }},
+         currency_code: {{ localization.country.currency.iso_code | json }}
+      },
+      language: {
+         iso_code: {{ localization.language.iso_code | json }},
+         name: {{ localization.language.name | json }}
+      },
+      market: {
+         handle: {{ localization.market.handle | json }},
+         id: {{ localization.market.id | json }}
       }
+   }
 
-      abone.init({{ shop.metafields.abone.tests.value }}, "{{ template.name }}", {{ shop.id }}, localization)
-   })
+   abone.init({{ shop.metafields.abone.tests.value }}, "{{ template.name }}", {{ shop.id }}, localization)
 </script>

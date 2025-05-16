@@ -164,7 +164,9 @@ const getRelevantTests = (
 const applyTests = (relevantTests: Test[], visitor: Visitor) => {
 	if (!relevantTests.length) return log("No relevant tests found.");
 
-	relevantTests.forEach((test) => {
+	for (let i = 0; i < relevantTests.length; i++) {
+		const test = relevantTests[i];
+
 		let variantSuffix: string | null = null;
 
 		const assignment: Assignment | undefined = visitor.assignments.find(
@@ -193,7 +195,7 @@ const applyTests = (relevantTests: Test[], visitor: Visitor) => {
 		}
 
 		applyVariant(test, variantSuffix);
-	});
+	}
 };
 
 /** Apply a variant. */
