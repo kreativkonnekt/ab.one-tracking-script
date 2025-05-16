@@ -60,6 +60,17 @@ const generateUUID = () => {
         return v.toString(16);
     });
 };
+/** Get a cookie by its name */
+const getCookie = (name) => {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+        const [key, value] = cookie.trim().split("=");
+        if (key === name) {
+            return decodeURIComponent(value);
+        }
+    }
+    return null;
+};
 /** Emits an event to the Shopify pixel. */
 const emit = (eventType, eventData = null) => {
     try {
@@ -78,6 +89,22 @@ const loadVisitor = () => {
         foundVisitor = false;
         visitor = {
             id: generateUUID(),
+            createdAt: new Date().toISOString(),
+            shopifyClientId: getCookie("_shopify_y") || "",
+            device: {
+                type: getDeviceType(),
+                viewport: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                },
+            },
+            utmParams: getUTMParameters(),
+            referrer: document.referrer || "",
+            referringDomain: getReferringDomain(document.referrer),
+            localization: {
+                currency: Shopify.currency.active,
+            },
+            tests: [],
         };
         localStorage.setItem(config.localStorageKey, JSON.stringify(visitor));
     }
@@ -95,6 +122,7 @@ const abone = {
         const visitor = loadVisitor();
     },
     reset() {
+        localStorage.removeItem(config.localStorageKey);
         log("Resetting tracking script.");
     },
 };

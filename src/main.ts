@@ -43,7 +43,7 @@ const getReferringDomain = (referrer: string): string => {
 };
 
 /** Returns the visitors UTM parameters. */
-const getUTMParameters = (): Record<string, string> => {
+const getUTMParameters = (): Record<UtmParameter, string> => {
 	const params = new URLSearchParams(window.location.search);
 	const keys = [
 		"utm_source",
@@ -69,6 +69,20 @@ const generateUUID = (): string => {
 	});
 };
 
+/** Get a cookie by its name */
+const getCookie = (name: string) => {
+	const cookies = document.cookie.split(";");
+
+	for (let cookie of cookies) {
+		const [key, value] = cookie.trim().split("=");
+		if (key === name) {
+			return decodeURIComponent(value);
+		}
+	}
+
+	return null;
+};
+
 /** Emits an event to the Shopify pixel. */
 const emit = (eventType: string, eventData: any = null): void => {
 	try {
@@ -92,6 +106,22 @@ const loadVisitor = (): Visitor => {
 
 		visitor = {
 			id: generateUUID(),
+			createdAt: new Date().toISOString(),
+			shopifyClientId: getCookie("_shopify_y") || "",
+			device: {
+				type: getDeviceType(),
+				viewport: {
+					width: window.innerWidth,
+					height: window.innerHeight,
+				},
+			},
+			utmParams: getUTMParameters(),
+			referrer: document.referrer || "",
+			referringDomain: getReferringDomain(document.referrer),
+			localization: {
+				currency: Shopify.currency.active,
+			},
+			tests: [],
 		};
 
 		localStorage.setItem(config.localStorageKey, JSON.stringify(visitor));
@@ -116,6 +146,8 @@ const abone = {
 		const visitor = loadVisitor();
 	},
 	reset() {
+		localStorage.removeItem(config.localStorageKey);
+
 		log("Resetting tracking script.");
 	},
 };
