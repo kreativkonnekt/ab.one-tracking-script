@@ -26,6 +26,11 @@ interface Condition {
 	values: string[];
 }
 
+interface Variant {
+	id: number;
+	suffix: string;
+}
+
 interface Visitor {
 	id: string;
 	createdAt: string;
@@ -41,7 +46,13 @@ interface Visitor {
 	referrer: Document["referrer"];
 	referringDomain: string;
 	localization: any;
-	tests: Test["id"][];
+	assignments: Assignment[];
+}
+
+interface Assignment {
+	testId: number;
+	variantSuffix: string;
+	assignedAt: string;
 }
 
 interface Test {
@@ -51,7 +62,7 @@ interface Test {
 	deviceType: Device;
 	visitorType: "all" | "new" | "returning";
 	traffic: number;
-	variants: string[];
+	variants: Variant[];
 	conditions: Condition[];
 }
 

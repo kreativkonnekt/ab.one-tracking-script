@@ -121,7 +121,7 @@ const loadVisitor = (): Visitor => {
 			localization: {
 				currency: Shopify.currency.active,
 			},
-			tests: [],
+			assignments: [],
 		};
 	}
 
@@ -164,22 +164,63 @@ const getRelevantTests = (
 const applyTests = (relevantTests: Test[], visitor: Visitor) => {
 	if (!relevantTests.length) return log("No relevant tests found.");
 
-	saveVisitor({ ...visitor, tests: relevantTests.map((t) => t.id) });
-
 	relevantTests.forEach((test) => {
-		const url = new URL(window.location.href);
-		const viewParameter = url.searchParams.get("view");
-		const variantSuffix =
-			test.variants[Math.floor(Math.random() * test.variants.length)];
+		let variantSuffix: string | null = null;
 
-		if (variantSuffix) {
-			url.searchParams.set("view", variantSuffix);
-			log("Setting view parameter", variantSuffix);
-			window.history.replaceState({}, "", url.toString());
+		const assignment: Assignment | undefined = visitor.assignments.find(
+			(a) => a.testId === test.id
+		);
+
+		if (assignment) {
+			// Visitor is already assigned to a variant of the current test
+			variantSuffix = assignment.variantSuffix;
+
+			log("Already assigned", variantSuffix);
+		} else {
+			// Assign a new variant to the visitor for the current test
+			variantSuffix =
+				test.variants[Math.floor(Math.random() * test.variants.length)].suffix; //! change this to a weight based selection instead of random
+
+			visitor.assignments.push({
+				testId: test.id,
+				variantSuffix,
+				assignedAt: new Date().toISOString(),
+			});
+
+			saveVisitor(visitor);
+			log("Assigned variant", variantSuffix);
+			emit("variant_assigned", { variantSuffix });
 		}
 
-		log("Selected variant", variantSuffix ? variantSuffix : "default");
+		applyVariant(test, variantSuffix);
 	});
+};
+
+/** Apply a variant. */
+const applyVariant = (test: Test, variantSuffix: string) => {
+	const url = new URL(window.location.href);
+	const view = url.searchParams.get("view");
+
+	if (!view && !variantSuffix) return;
+
+	if (!view && variantSuffix) {
+		url.searchParams.set("view", variantSuffix);
+		window.history.replaceState({}, "", url.toString());
+		return;
+	}
+
+	if (view && !variantSuffix) {
+		// If the view is set but the variant suffix is not, remove the view parameter
+		url.searchParams.delete("view");
+		window.history.replaceState({}, "", url.toString());
+		return;
+	}
+
+	if (view !== variantSuffix) {
+		url.searchParams.set("view", variantSuffix);
+		window.history.replaceState({}, "", url.toString());
+		return;
+	}
 };
 
 //
