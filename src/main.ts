@@ -235,7 +235,7 @@ const abone = {
 		shopId: number,
 		localization: any
 	) {
-		if (Shopify.designMode)
+		if (window.Shopify?.designMode)
 			return log("Design mode detected. Abandoning script execution.");
 
 		const visitor = loadVisitor();

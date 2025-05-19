@@ -188,7 +188,8 @@ const applyVariant = (test, variantSuffix) => {
 //
 const abone = {
     init(tests, templateName, shopId, localization) {
-        if (Shopify.designMode)
+        var _a;
+        if ((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)
             return log("Design mode detected. Abandoning script execution.");
         const visitor = loadVisitor();
         const test = getRelevantTests(tests, templateName, visitor);
