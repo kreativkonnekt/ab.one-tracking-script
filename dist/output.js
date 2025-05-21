@@ -83,6 +83,7 @@ const emit = (eventType, eventData = null) => {
 };
 /** Load or create the visitor. */
 const loadVisitor = () => {
+    var _a;
     let foundVisitor = true;
     let visitor = JSON.parse(localStorage.getItem(config.localStorageKey) || "{}");
     if (!visitor.id) {
@@ -102,7 +103,7 @@ const loadVisitor = () => {
             referrer: document.referrer || "",
             referringDomain: getReferringDomain(document.referrer),
             localization: {
-                currency: Shopify.currency.active,
+                currency: (_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.currency.active,
             },
             assignments: [],
         };

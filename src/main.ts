@@ -119,7 +119,7 @@ const loadVisitor = (): Visitor => {
 			referrer: document.referrer || "",
 			referringDomain: getReferringDomain(document.referrer),
 			localization: {
-				currency: Shopify.currency.active,
+				currency: window.Shopify?.currency.active,
 			},
 			assignments: [],
 		};
