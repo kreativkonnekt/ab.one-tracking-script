@@ -6,6 +6,8 @@ const config = {
 	debug: true,
 	prefix: "ab.one",
 	localStorageKey: "ab.one_visitor",
+	maxRetries: 3,
+	retryDelay: 2000, // 2 seconds
 };
 
 //
@@ -23,6 +25,20 @@ const error = (...args: any[]) => {
 	if (!config.debug) return;
 
 	console.error(`[${config.prefix}]`, ...args);
+};
+
+/** Check if Shopify object is available */
+const isShopifyAvailable = (): boolean => {
+	return (
+		typeof window.Shopify !== "undefined" &&
+		typeof window.Shopify.analytics !== "undefined" &&
+		typeof window.Shopify.analytics.publish === "function"
+	);
+};
+
+/** Sleep function for delayed retry */
+const sleep = (ms: number): Promise<void> => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 /** Returns the device type of the visitor. */
@@ -229,7 +245,7 @@ const applyVariant = (test: Test, variantSuffix: string) => {
 //
 
 const abone = {
-	init(
+	async init(
 		tests: Test[],
 		templateName: TemplateCategory,
 		shopId: number,
@@ -238,8 +254,23 @@ const abone = {
 		if (window.Shopify?.designMode)
 			return log("Design mode detected. Abandoning script execution.");
 
+		// Check if Shopify object is available
+		let retryCount = 0;
+		while (!isShopifyAvailable() && retryCount < config.maxRetries) {
+			retryCount++;
+			log(
+				`Shopify object not available, retrying (${retryCount}/${config.maxRetries})...`
+			);
+			await sleep(config.retryDelay);
+		}
+
+		if (!isShopifyAvailable()) {
+			error(
+				"Shopify object not available after retries. Some functionality may be limited."
+			);
+		}
+
 		const visitor = loadVisitor();
-		const test = getRelevantTests(tests, templateName, visitor);
 		const relevantTests = getRelevantTests(tests, templateName, visitor);
 
 		applyTests(relevantTests, visitor);

@@ -1,10 +1,21 @@
 //
 // Config
 //
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 const config = {
     debug: true,
     prefix: "ab.one",
     localStorageKey: "ab.one_visitor",
+    maxRetries: 3,
+    retryDelay: 2000, // 2 seconds
 };
 //
 // Utilities
@@ -20,6 +31,16 @@ const error = (...args) => {
     if (!config.debug)
         return;
     console.error(`[${config.prefix}]`, ...args);
+};
+/** Check if Shopify object is available */
+const isShopifyAvailable = () => {
+    return (typeof window.Shopify !== "undefined" &&
+        typeof window.Shopify.analytics !== "undefined" &&
+        typeof window.Shopify.analytics.publish === "function");
+};
+/** Sleep function for delayed retry */
+const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 };
 /** Returns the device type of the visitor. */
 const getDeviceType = () => {
@@ -189,14 +210,25 @@ const applyVariant = (test, variantSuffix) => {
 //
 const abone = {
     init(tests, templateName, shopId, localization) {
-        var _a;
-        if ((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)
-            return log("Design mode detected. Abandoning script execution.");
-        const visitor = loadVisitor();
-        const test = getRelevantTests(tests, templateName, visitor);
-        const relevantTests = getRelevantTests(tests, templateName, visitor);
-        applyTests(relevantTests, visitor);
-        log({ relevantTests, tests, templateName, shopId, localization });
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            if ((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)
+                return log("Design mode detected. Abandoning script execution.");
+            // Check if Shopify object is available
+            let retryCount = 0;
+            while (!isShopifyAvailable() && retryCount < config.maxRetries) {
+                retryCount++;
+                log(`Shopify object not available, retrying (${retryCount}/${config.maxRetries})...`);
+                yield sleep(config.retryDelay);
+            }
+            if (!isShopifyAvailable()) {
+                error("Shopify object not available after retries. Some functionality may be limited.");
+            }
+            const visitor = loadVisitor();
+            const relevantTests = getRelevantTests(tests, templateName, visitor);
+            applyTests(relevantTests, visitor);
+            log({ relevantTests, tests, templateName, shopId, localization });
+        });
     },
     reset() {
         localStorage.removeItem(config.localStorageKey);
