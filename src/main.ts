@@ -251,9 +251,6 @@ const abone = {
 		shopId: number,
 		localization: any
 	) {
-		if (window.Shopify?.designMode)
-			return log("Design mode detected. Abandoning script execution.");
-
 		// Check if Shopify object is available
 		let retryCount = 0;
 		while (!isShopifyAvailable() && retryCount < config.maxRetries) {
@@ -269,6 +266,9 @@ const abone = {
 				"Shopify object not available after retries. Some functionality may be limited."
 			);
 		}
+
+		if (window.Shopify?.designMode)
+			return log("Design mode detected. Abandoning script execution.");
 
 		const visitor = loadVisitor();
 		const relevantTests = getRelevantTests(tests, templateName, visitor);
