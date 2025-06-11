@@ -212,8 +212,6 @@ const abone = {
     init(tests, templateName, shopId, localization) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
-            if ((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)
-                return log("Design mode detected. Abandoning script execution.");
             // Check if Shopify object is available
             let retryCount = 0;
             while (!isShopifyAvailable() && retryCount < config.maxRetries) {
@@ -224,6 +222,8 @@ const abone = {
             if (!isShopifyAvailable()) {
                 error("Shopify object not available after retries. Some functionality may be limited.");
             }
+            if ((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)
+                return log("Design mode detected. Abandoning script execution.");
             const visitor = loadVisitor();
             const relevantTests = getRelevantTests(tests, templateName, visitor);
             applyTests(relevantTests, visitor);
