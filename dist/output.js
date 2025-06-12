@@ -212,6 +212,11 @@ const abone = {
     init(tests, templateName, shopId, localization) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
+            // Exit if screenshot parameter is true
+            const url = new URL(window.location.href);
+            if (url.searchParams.get('screenshot') === 'true') {
+                return log('Screenshot mode detected. Exiting script execution.');
+            }
             // Check if Shopify object is available
             let retryCount = 0;
             while (!isShopifyAvailable() && retryCount < config.maxRetries) {
